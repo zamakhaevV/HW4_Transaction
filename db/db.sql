@@ -2,6 +2,9 @@
 
 -- DROP DATABASE sberbank;
 
+-- DROP TABLE devices;
+-- DROP TABLE users;
+
 CREATE DATABASE sberbank
     WITH
     OWNER = postgres

@@ -15,9 +15,6 @@ public class User {
 
     private int age;
 
-    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Device> devices;
-
     public User() {
 
     }
@@ -25,7 +22,6 @@ public class User {
     public User(String name, int age) {
         this.name = name;
         this.age = age;
-        devices = new ArrayList<>();
     }
 
     public int getId() {
@@ -46,23 +42,6 @@ public class User {
 
     public int getAge() {
         return age;
-    }
-
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
-    }
-
-    public List<Device> getDevices() {
-        return devices;
-    }
-
-    public void addDevice(Device device) {
-        device.setUser(this);
-        devices.add(device);
-    }
-
-    public void removeDevice(Device device) {
-        devices.remove(device);
     }
 
     @Override

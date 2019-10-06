@@ -4,22 +4,22 @@ import dao.UserDao;
 import models.Device;
 import models.User;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import utils.HibernateSessionFactoryUtil;
 
 public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
 
-        Dao<User> userDao = new UserDao(sessionFactory);
-
+        Dao<User> userDao = new UserDao(session);
+        Dao<Device> deviceDao = new DeviceDao(session);
         System.out.println("=== Users ===");
         for (User user : userDao.findAll()) {
             System.out.println(user.toString());
         }
         System.out.println();
-
-        Dao<Device> deviceDao = new DeviceDao(sessionFactory);
 
         Device updateDevice = deviceDao.findById(4);
         updateDevice.setModel("New Model");
@@ -33,11 +33,13 @@ public class Main {
         System.out.println();
 
         User saveUser = new User("Steve", 16);
-        Device deviceMouse = new Device("Mouse", "Asus");
-        Device deviceKeyboard = new Device("Keyboard", "Razor");
-        saveUser.addDevice(deviceMouse);
-        saveUser.addDevice(deviceKeyboard);
         userDao.save(saveUser);
+
+        int saveUserId = saveUser.getId();
+        Device deviceMouse = new Device("Mouse", "Asus", saveUserId);
+        Device deviceKeyboard = new Device("Keyboard", "Razor", saveUserId);
+        deviceDao.save(deviceMouse);
+        deviceDao.save(deviceKeyboard);
         System.out.println();
 
         System.out.println("=== Users ===");
